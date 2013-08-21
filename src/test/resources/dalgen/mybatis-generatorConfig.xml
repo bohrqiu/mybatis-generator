@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<properties resource="dalgen/jdbc.properties" />
+	<context id="cs" targetRuntime="MyBatis3">
+		<!-- tostring 插件 -->
+		<plugin type="dalgen.generator.plugins.ToStringPlugin" />
+		<!-- equals 插件 -->
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+		<!-- 序列化标识 插件 -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<!-- 重命名插件 -->
+		<plugin type="dalgen.generator.plugins.RenameClassPlugin" />
+
+		<!-- MapperConfig配置文件，生成路径为：src/gen/resources/dal/cs.MapperConfig.xml -->
+		<plugin type="dalgen.generator.plugins.MapperConfigPlugin">
+			<property name="targetProject" value="src/gen/resources" />
+			<property name="targetPackage" value="dal" />
+			<property name="fileName" value="cs.MapperConfig.xml" />
+		</plugin>
+		<!-- 生成注释 -->
+		<commentGenerator type="dalgen.generator.plugins.DefaultCommentGenerator" />
+		<!-- 数据库配置 -->
+		<jdbcConnection driverClass="${ds.mysqlClassName}"
+			connectionURL="${ds.cs.mysqlUrl}" userId="${ds.cs.username}"
+			password="${ds.cs.password}">
+		</jdbcConnection>
+		<!-- forceBigDecimals，默认false。如果字段精确超过0，生成BigDecimal;如果字段精确是0，总长度10-18生成Long; 
+			如果字段精确是0，总长5-9生成Integer; 如果字段精确是0，总长小于5生成Short; 如果forceBigDecimals为true,统一生成BigDecimal -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- DO生成路径:src/gen/java/com.yjf.cs.dal.dto-->
+		<javaModelGenerator targetPackage="com.yjf.cs.dal.dto"
+			targetProject="src/gen/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- mapper 配置文件生成路径:src/gen/resources -->
+		<sqlMapGenerator targetPackage="com.yjf.cs.dal.mapper"
+			targetProject="src/gen/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- mapper java类文件生成路径:src/gen/java/com/yjf/cs/dal/mapper -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetProject="src/gen/java" targetPackage="com.yjf.cs.dal.mapper">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<!-- tables -->
+		<!-- 下面是对一个表的映射，下表中id字段是自增长的，需要加上一个generatedKey映射自增字段
+		如果有数据库中有money的字段，需要加上如下：
+		<columnOverride column="accrual_credit_balance"
+				typeHandler="com.yjf.jointest.mybatis.type.MoneyTypeHandler"
+				javaType="com.yjf.common.lang.util.money.Money" />
+				
+		如果所有的table都符合一定的规则，可以采用在tableName里面加上*，来实现匹配所有的表
+		比如以user为前缀的表，id都是自增字段
+		<table schema="yjf_cs" tableName="user_*">
+			<generatedKey column="id" sqlStatement="MYSQL" identity="true" />
+		</table>
+		 -->
+		<table schema="yjf_cs" tableName="sys_seq">
+			<generatedKey column="id" sqlStatement="MYSQL" identity="true" />
+		</table>
+	</context>
+
+</generatorConfiguration>
